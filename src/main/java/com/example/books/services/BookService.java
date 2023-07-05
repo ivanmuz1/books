@@ -46,5 +46,6 @@ public class BookService {
     public void deleteUserByIdToArchive(int id){
         Optional<Book> book = bookRepository.findById(id);
         book.get().setDeleted(true);
+        bookRepository.save(book.get());
     }
 }

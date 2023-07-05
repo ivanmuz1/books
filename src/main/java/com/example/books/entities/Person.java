@@ -48,6 +48,6 @@ public class Person {
             joinColumns = @JoinColumn(name = "reader_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
-    List<Book> bookList;
+    List<Book> books;
 
 }

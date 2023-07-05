@@ -41,7 +41,7 @@ public class PersonController {
 
     @DeleteMapping("/user/delete/{PersonId}")
     public void delete(@PathVariable int PersonId){
-        personService.deleteById(PersonId);
+        personService.deleteUserByIdToArchive(PersonId);
     }
 
     @GetMapping("/user/{PersonID}/books")
@@ -53,7 +53,7 @@ public class PersonController {
                 person.get().getAge(),
                 person.get().getEmail(),
                 person.get().getRole(),
-                person.get().getBookList()
+                person.get().getBooks()
         );
 
        return personDTO;

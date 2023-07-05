@@ -49,5 +49,6 @@ public class PersonService {
     public void deleteUserByIdToArchive(int id){
         Optional<Person> person = personRepository.findById(id);
         person.get().setDeleted(true);
+        personRepository.save(person.get());
     }
 }

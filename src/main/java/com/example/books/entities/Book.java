@@ -31,7 +31,7 @@ public class Book {
     @Column(name = "deleted")
     Boolean deleted;
 
-    @ManyToMany(mappedBy = "person")
-    List<Person> personList;
+    @ManyToMany(mappedBy = "books")
+    List<Person> persons;
 
 }
