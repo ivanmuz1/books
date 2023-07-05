@@ -2,12 +2,18 @@ package com.example.books.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "form")
 @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class Form {
 
     @Id
@@ -27,7 +33,10 @@ public class Form {
     @Column(name = "book_id")
     Integer BookId;
 
-    public Form() {
+    @Column(name = "penalties")
+    Integer Penalties;
 
-    }
+    @Column(name = "days_in_arrears")
+    Integer DaysInArrears;
+
 }
