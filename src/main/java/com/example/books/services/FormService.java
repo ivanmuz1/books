@@ -2,7 +2,7 @@ package com.example.books.services;
 
 import com.example.books.entities.Form;
 import com.example.books.repositories.FormRepository;
-import jakarta.transaction.Transactional;
+import com.example.books.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +15,13 @@ public class FormService {
     private final FormRepository formRepository;
 
 
-    public FormService(FormRepository formRepository) {
+    @Autowired
+    private final PersonRepository personRepository;
+
+
+    public FormService(FormRepository formRepository, PersonRepository personRepository) {
         this.formRepository = formRepository;
+        this.personRepository = personRepository;
     }
 
     public List<Form> findAll(){
