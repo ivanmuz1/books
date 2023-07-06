@@ -14,7 +14,7 @@ public interface FormRepository extends JpaRepository<Form, Integer> {
     @Query(value = "select * from form where reader_id = ?", nativeQuery = true)
     List<Form> findAllByIdUser(int id);
 
-    @Query(value = "select * from form\n" +
-            "    where extract(year from date_returned) = ?\n" , nativeQuery = true)
-    List<Form> findUserByMonth(Date date);
+    @Query(value = "select * from form where extract(month from date_delivery) = ?\n" +
+            "    and  extract(year from date_delivery) = ?", nativeQuery = true)
+    List<Form> findUserByMonth(int month, int year);
 }

@@ -19,6 +19,8 @@ create table form(
                      reader_id int references person(person_id),
                      book_id int references book(book_id),
                      date_receipt date,
-                     date_returned date
+                     date_delivery date,
+                     date_return date,
+                     penalties int
 
 );

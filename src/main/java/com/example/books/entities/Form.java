@@ -24,8 +24,11 @@ public class Form {
     @Column(name = "date_receipt")
     Date DateReceipt;
 
-    @Column(name = "date_returned")
-    Date DateReturned;
+    @Column(name = "date_delivery")
+    Date DateDelivery;
+
+    @Column(name = "return_date")
+    Date DateReturn;
 
     @Column(name = "reader_id")
     Integer ReaderId;

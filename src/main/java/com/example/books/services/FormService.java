@@ -37,7 +37,7 @@ public class FormService {
     public void addNewEntry(Form form) { //изменить
         Optional<Person> currentPerson = personRepository.findById(1);
         form.setReaderId(currentPerson.get().getPersonId());
-        form.setDateReturned(new Date());
+        form.setDateDelivery(new Date());
         formRepository.save(form);
     }
 
@@ -45,19 +45,24 @@ public class FormService {
         Date DateCur = new Date();
         List<Form> formOfUser = formRepository.findAllByIdUser(ReaderId);
         formOfUser.stream().forEach(i->{
-                long diffInDays = ChronoUnit.DAYS.between(i.getDateReturned().toInstant(), DateCur.toInstant());
-                if(diffInDays > 30){
-                    i.setPenalties((int) ((diffInDays - 30) * 5));
-                }
-                if(diffInDays > 0){
-                    i.setDaysInArrears((int) diffInDays);
+                  long diffInDaysForDelay = ChronoUnit.DAYS.between(i.getDateDelivery().toInstant(), DateCur.toInstant());
+
+                    if(i.getDateReturn() != null && i.getDateDelivery().after(i.getDateReturn())){
+                        i.setPenalties(0);
+                        i.setDaysInArrears(0);
+                    }
+                    else if (diffInDaysForDelay > 0) {
+                        i.setPenalties((int) ((diffInDaysForDelay) * 5));
+                        i.setDaysInArrears((int) diffInDaysForDelay);
+                    }
+                    else{
+                        i.setPenalties((int) ChronoUnit.DAYS.between(i.getDateDelivery().toInstant(), i.getDateReturn().toInstant())  * 5);
+                        i.setDaysInArrears((int)ChronoUnit.DAYS.between(i.getDateDelivery().toInstant(), i.getDateReturn().toInstant()));
+                    }
                     formRepository.save(i);
                 }
-            }
         );
     }
-
-
 
 
 }
