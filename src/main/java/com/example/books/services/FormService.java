@@ -34,6 +34,8 @@ public class FormService {
         return formRepository.findAll();
     }
 
+    public List<Form> EmailWithDayDelay() {return formRepository.EmailWithDayDelay();}
+
     public void addNewEntry(Form form) { //изменить
         Optional<Person> currentPerson = personRepository.findById(1);
         form.setReaderId(currentPerson.get().getPersonId());
@@ -50,12 +52,13 @@ public class FormService {
                     if(i.getDateReturn() != null && i.getDateDelivery().after(i.getDateReturn())){
                         i.setPenalties(0);
                         i.setDaysInArrears(0);
-                    }
-                    else if (diffInDaysForDelay > 0) {
-                        i.setPenalties((int) ((diffInDaysForDelay) * 5));
+                    } else if (i.getDateReturn() == null && i.getDateDelivery().after(DateCur)) {
+                        i.setPenalties(0);
+                        i.setDaysInArrears(0);
+                    } else if (i.getDateReturn() == null && !(i.getDateDelivery().after(DateCur))) {
                         i.setDaysInArrears((int) diffInDaysForDelay);
-                    }
-                    else{
+                        i.setPenalties((int) ((diffInDaysForDelay) * 5));
+                    } else if (i.getDateReturn() != null && i.getDateReturn().after(i.getDateDelivery()) ) {
                         i.setPenalties((int) ChronoUnit.DAYS.between(i.getDateDelivery().toInstant(), i.getDateReturn().toInstant())  * 5);
                         i.setDaysInArrears((int)ChronoUnit.DAYS.between(i.getDateDelivery().toInstant(), i.getDateReturn().toInstant()));
                     }
@@ -63,6 +66,8 @@ public class FormService {
                 }
         );
     }
+
+
 
 
 }

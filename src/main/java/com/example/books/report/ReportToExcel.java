@@ -14,15 +14,13 @@ import org.springframework.stereotype.Service;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.sql.Date;
-import java.time.Month;
-import java.time.Year;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -37,46 +35,67 @@ public class ReportToExcel {
     @Autowired
     BookRepository bookRepository;
 
-    public Integer daysOfDelay(LocalDate SpecifiedDate){
+    public Integer daysOfDelay(LocalDate firstDay, LocalDate endDay, Date DateReturn, Date DateDelivery){
 
-        LocalDate end = SpecifiedDate.withDayOfMonth(SpecifiedDate.getMonth().length(SpecifiedDate.isLeapYear()));
-        System.out.println(end);
+        LocalDate LastDateDelivery = DateDelivery.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        return 1;
+        if(DateReturn == null){
+            if(LastDateDelivery.isBefore(firstDay)){return (int) ChronoUnit.DAYS.between(firstDay, endDay) + 1;}
+            else if (LastDateDelivery.isAfter(endDay)) {return 0;}
+        }
+        else {
+            LocalDate DateIsReturning = DateReturn.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if(LastDateDelivery.isBefore(firstDay)){
+                if(DateIsReturning.isBefore(endDay)) {return (int) ChronoUnit.DAYS.between(firstDay, DateIsReturning) + 1;}
+                else {return (int) ChronoUnit.DAYS.between(firstDay, endDay) + 1;}
+            }
+            else if(LastDateDelivery.isAfter(DateIsReturning)){return 0;}
+        }
+        return 0;
     }
 
     public void generateReport(LocalDate SpecifiedDate) throws IOException, ParseException {
 
-        Integer month = SpecifiedDate.getMonthValue();
-        Integer year = SpecifiedDate.getYear();
+        LocalDate firstDay = SpecifiedDate.withDayOfMonth(1);
+        LocalDate endDay = SpecifiedDate.withDayOfMonth(SpecifiedDate.lengthOfMonth());
 
-        List<Form> formList = formRepository.findUserByMonth(month, year);
+        List<Form> formList = formRepository.findUserByMonth(firstDay, endDay);
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Отчет");
 
         Row header = sheet.createRow(0);
         header.createCell(0).setCellValue("Имя пользователя");
-        header.createCell(1).setCellValue("Название книги");
-        header.createCell(2).setCellValue("Дней просрочки за этот месяц");
-        header.createCell(3).setCellValue("Пенни за месяц");
-        header.createCell(4).setCellValue("Дата взятия");
-        header.createCell(5).setCellValue("Дата отдачи");
-        header.createCell(6).setCellValue("id");
+        header.createCell(1).setCellValue("Email");
+        header.createCell(2).setCellValue("Название книги");
+        header.createCell(3).setCellValue("Дата взятия");
+        header.createCell(4).setCellValue("Дата возврата");
+        header.createCell(5).setCellValue("Дней просрочки за этот месяц");
+        header.createCell(6).setCellValue("Пенни за месяц");
 
         int rowNumber = 1;
         for(Form form: formList){
+
             Row row = sheet.createRow(rowNumber++);
+
             row.createCell(0).setCellValue(personRepository.findById(form.getReaderId()).get().getName());
-            row.createCell(1).setCellValue(bookRepository.findById(form.getBookId()).get().getTitle());
-            row.createCell(2).setCellValue(form.getDateReceipt());
-            row.createCell(3).setCellValue(form.getPenalties());
-            row.createCell(4).setCellValue(form.getDateReceipt().toString());
-            row.createCell(5).setCellValue(form.getDateReturn().toString());
-            row.createCell(6).setCellValue(form.getFormId().toString());
+            row.createCell(1).setCellValue(personRepository.findById(form.getReaderId()).get().getEmail());
+            row.createCell(2).setCellValue(bookRepository.findById(form.getBookId()).get().getTitle());
+            row.createCell(3).setCellValue(form.getDateReceipt().toString());
+
+            if(form.getDateReturn() == null){
+                row.createCell(4).setCellValue("Не вернул");
+            }else{
+                row.createCell(4).setCellValue(form.getDateReturn().toString());
+            }
+
+            Integer daysDelay = daysOfDelay(firstDay, endDay, form.getDateReturn(), form.getDateDelivery());
+
+            row.createCell(5).setCellValue(daysDelay); //дни просрочки
+            row.createCell(6).setCellValue(daysDelay * 5); //кол-во пенни
         }
 
-        for(int i = 0; i < 6; ++i){
+        for(int i = 0; i < 7; ++i){
             sheet.autoSizeColumn(i);
         }
 
