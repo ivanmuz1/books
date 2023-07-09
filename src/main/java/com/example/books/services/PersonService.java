@@ -51,4 +51,9 @@ public class PersonService {
         person.get().setDeleted(true);
         personRepository.save(person.get());
     }
+
+    @Transactional
+    public List<Person> ListDebtors(){
+        return personRepository.ListDebtors();
+    }
 }

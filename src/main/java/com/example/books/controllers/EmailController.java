@@ -17,7 +17,7 @@ public class EmailController {
     @Autowired
     private SendService sendService;
     @PostMapping("/sendEmail")
-    public String sendEmail(@RequestBody EmailRequest emailRequest) throws MessagingException {
+    public String sendEmail() throws MessagingException {
 
         sendService.send();
 

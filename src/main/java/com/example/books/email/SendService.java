@@ -1,7 +1,10 @@
 package com.example.books.email;
 
 
+import com.example.books.entities.Book;
 import com.example.books.entities.Form;
+import com.example.books.entities.Person;
+import com.example.books.repositories.PersonRepository;
 import com.example.books.services.BookService;
 import com.example.books.services.FormService;
 import com.example.books.services.PersonService;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -34,19 +38,41 @@ public class SendService{
     @Autowired
     private BookService bookService;
 
-   // @Scheduled(fixedRate = 30000)
-    public void send() throws MessagingException {
-        List<Form> debtors = formService.EmailWithDayDelay();
+    Integer CountDelay(Date DateDelivery){
         Date DateCur = new Date();
-        debtors.stream().forEach(
-                i->{
-                    SimpleMailMessage mail = new SimpleMailMessage();
-                    mail.setTo(personService.findById(i.getReaderId()).get().getEmail());
-                    mail.setSubject("Долг за книгу!");
-                    Integer CountDelay = (int) ChronoUnit.DAYS.between(i.getDateDelivery().toInstant(), DateCur.toInstant());
-                    String BookName = bookService.findById(i.getBookId()).get().getTitle();
-                    mail.setText("Книга: " + BookName + " " + "Количество просроченных дней:" + CountDelay + " " + "Пенни: " + " " + CountDelay * 5);
-                    javaMailSender.send(mail);
+        return (int) ChronoUnit.DAYS.between(DateDelivery.toInstant(), DateCur.toInstant());
+    }
+
+    //@Scheduled(fixedRate = 5000)
+    public void send() throws MessagingException {
+
+        List<Person> personList = personService.findAll();
+
+        personList.stream().forEach( //бегу по формуляру, который состоит из должников
+                person->{
+                    SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+                    String subject = "Просрочка книги";
+                    simpleMailMessage.setSubject(subject);
+
+                    formService.DaysInArrears(person.getPersonId());
+
+                    List<Form> formList = formService.EmailForPerson(person.getPersonId());
+
+                    StringBuilder textBuilder = new StringBuilder();
+                    textBuilder.append("Здравствуйте, ").append(person.getName()).append("!\n").append("Вы должны слеующие книги:\n");
+
+                    formList.stream().forEach(
+                            form -> {
+                                textBuilder.append("Книга: ").append(bookService.findById(form.getBookId()).get().getTitle()).append(", дней просрочки:")
+                                        .append(form.getDaysInArrears()).append(", пенни:").append(form.getPenalties()).append("\n");
+                            }
+                    );
+
+                    simpleMailMessage.setTo(person.getEmail());
+                    simpleMailMessage.setText(textBuilder.toString());
+                    javaMailSender.send(simpleMailMessage);
+
                 }
         );
     }

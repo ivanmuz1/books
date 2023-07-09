@@ -34,7 +34,9 @@ public class FormService {
         return formRepository.findAll();
     }
 
-    public List<Form> EmailWithDayDelay() {return formRepository.EmailWithDayDelay();}
+    public List<Form> EmailForPerson(int id) {
+        return formRepository.EmailForPerson(id);
+    }
 
     public void addNewEntry(Form form) { //изменить
         Optional<Person> currentPerson = personRepository.findById(1);
@@ -43,7 +45,7 @@ public class FormService {
         formRepository.save(form);
     }
 
-    public void DaysInArrears(int ReaderId){ //подсчет пенни и просроченных дней
+    public List<Form> DaysInArrears(int ReaderId){
         Date DateCur = new Date();
         List<Form> formOfUser = formRepository.findAllByIdUser(ReaderId);
         formOfUser.stream().forEach(i->{
@@ -65,6 +67,7 @@ public class FormService {
                     formRepository.save(i);
                 }
         );
+        return formOfUser;
     }
 
 

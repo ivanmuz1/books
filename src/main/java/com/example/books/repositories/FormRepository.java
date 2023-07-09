@@ -24,6 +24,6 @@ public interface FormRepository extends JpaRepository<Form, Integer> {
 
 
     @Query(value = "select * from form\n" +
-            "where return_date is null and now() > date_delivery", nativeQuery = true)
-    List<Form> EmailWithDayDelay();
+            "            where return_date is null and now() > date_delivery and reader_id = ?", nativeQuery = true)
+    List<Form> EmailForPerson(int reader_id);
 }
