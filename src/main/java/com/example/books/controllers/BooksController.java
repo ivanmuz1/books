@@ -11,34 +11,35 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/library")
 public class BooksController {
 
     @Autowired
     BookService bookService;
 
-    @GetMapping("/books")
-    public String books(){
-        return bookService.findAll().toString();
+    @GetMapping("/allbooks")
+    public Iterable<Book> books(){
+        return bookService.findAll();
     }
 
-    @PostMapping("/books/save")
+    @PostMapping("/book/save")
     public List<Book> saveBook(@RequestBody Book book){
         bookService.save(book);
         return bookService.findAll();
     }
 
-    @PostMapping("/books/{BookId}")
+    @PostMapping("/book/update/{BookId}")
     public Optional<Book> update(@PathVariable int BookId, @RequestBody Book book){
         bookService.updateBook(BookId, book);
         return bookService.findById(BookId);
     }
 
-    @PostMapping("/books/book/{BookId}")
+    @PostMapping("/{BookId}")
     public Optional<Book> findById(@PathVariable int BookId){
         return bookService.findById(BookId);
     }
 
-    @DeleteMapping("/books/book/delete/{BookId}")
+    @DeleteMapping("/book/delete/{BookId}")
     public void delete(@PathVariable int BookId){
         bookService.deleteUserByIdToArchive(BookId);
     }

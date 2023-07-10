@@ -28,7 +28,7 @@ public class PersonController {
         return personService.findAll();
     }
 
-    @PostMapping("/user/update/{PersonId}")
+    @PostMapping("/update/{PersonId}")
     public Optional<Person> update(@PathVariable int PersonId, @RequestBody Person person){
         personService.updatePerson(PersonId, person);
         return personService.findById(PersonId);
@@ -44,7 +44,7 @@ public class PersonController {
         personService.deleteUserByIdToArchive(PersonId);
     }
 
-    @GetMapping("/user/{PersonID}/books")
+    @GetMapping("/user/{PersonID}/showBooks")
     public PersonDTO show(@PathVariable int PersonID){
         Optional<Person> person = personService.findById(PersonID);
 

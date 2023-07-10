@@ -1,6 +1,7 @@
 package com.example.books.entities;
 
 import com.example.books.entities.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,6 +50,7 @@ public class Person {
     private Boolean deleted;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "form",
             joinColumns = @JoinColumn(name = "reader_id"),

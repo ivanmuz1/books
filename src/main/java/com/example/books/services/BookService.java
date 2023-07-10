@@ -18,7 +18,7 @@ public class BookService {
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
-    @Transactional(readOnly = true)
+    @Transactional()
     public List<Book> findAll(){
         return bookRepository.findAll();
     }

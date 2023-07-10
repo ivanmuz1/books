@@ -57,8 +57,8 @@ public class WebSecurityConfig{
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/books").hasRole("USER")
-                //.requestMatchers("/**").hasRole("ADMIN")
+                .requestMatchers("/user", "/library/{BookId}", "/library/allbooks").hasRole("USER")
+                .requestMatchers("/library/book/**", "/sendEmail", "/form/**").hasRole("ADMIN")
                 .requestMatchers("/login", "/reg").permitAll()
                 .anyRequest()
                 .authenticated()
@@ -68,7 +68,6 @@ public class WebSecurityConfig{
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
 

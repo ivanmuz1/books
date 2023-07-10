@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.TimeZone;
 
 @RestController
+@RequestMapping("/form")
 public class FormController {
 
     @Autowired

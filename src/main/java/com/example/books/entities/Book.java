@@ -32,6 +32,7 @@ public class Book {
     private Boolean deleted;
 
     @ManyToMany(mappedBy = "books")
+    @JsonIgnore
     List<Person> persons;
 
 }
