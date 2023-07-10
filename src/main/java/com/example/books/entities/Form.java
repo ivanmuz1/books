@@ -19,27 +19,27 @@ public class Form {
     @Id
     @Column(name = "form_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer FormId;
+    private Integer FormId;
 
     @Column(name = "date_receipt")
-    Date DateReceipt;
+    private Date DateReceipt;
 
     @Column(name = "date_delivery")
-    Date DateDelivery;
+    private Date DateDelivery;
 
     @Column(name = "return_date")
-    Date DateReturn;
+    private Date DateReturn;
 
     @Column(name = "reader_id")
-    Integer ReaderId;
+    private Integer ReaderId;
 
     @Column(name = "book_id")
-    Integer BookId;
+    private Integer BookId;
 
     @Column(name = "penalties")
-    Integer Penalties;
+    private Integer Penalties;
 
     @Column(name = "days_in_arrears")
-    Integer DaysInArrears;
+    private Integer DaysInArrears;
 
 }

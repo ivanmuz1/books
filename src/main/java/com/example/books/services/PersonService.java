@@ -4,6 +4,9 @@ import com.example.books.entities.Book;
 import com.example.books.entities.Person;
 import com.example.books.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +27,7 @@ public class PersonService {
         return personRepository.findAll();
     }
     @Transactional
-    public void save(Person person){
+    public  void save(Person person){
         personRepository.save(person);
     } //создание новоего пользователя
 
@@ -56,4 +59,10 @@ public class PersonService {
     public List<Person> ListDebtors(){
         return personRepository.ListDebtors();
     }
+
+    @Transactional
+    public Optional<Person> findByemail(String email){
+        return personRepository.findByemail(email);
+    }
+
 }

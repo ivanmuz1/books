@@ -38,10 +38,6 @@ public class SendService{
     @Autowired
     private BookService bookService;
 
-    Integer CountDelay(Date DateDelivery){
-        Date DateCur = new Date();
-        return (int) ChronoUnit.DAYS.between(DateDelivery.toInstant(), DateCur.toInstant());
-    }
 
     //@Scheduled(fixedRate = 5000)
     public void send() throws MessagingException {

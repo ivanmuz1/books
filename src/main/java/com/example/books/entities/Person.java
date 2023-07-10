@@ -14,33 +14,39 @@ import java.util.List;
 @Table(name = "person")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Person {
+    public Person(String name, Integer age, String email, String password, Role role) {
+        Name = name;
+        Age = age;
+        this.email = email;
+        Password = password;
+        this.role = role;
+    }
 
     @Id
     @Column(name = "person_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer PersonId;
+    private Integer PersonId;
 
     @Column(name = "name")
-    String Name;
+    private String Name;
 
     @Column(name = "age")
-    Integer Age;
+    private Integer Age;
 
     @Column(name = "email")
-    String Email;
+    private String email;
 
     @Column(name = "password")
-    String Password;
+    private String Password;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    Role role;
+    private Role role;
 
     @Column(name = "deleted")
-    Boolean deleted;
+    private Boolean deleted;
 
     @ManyToMany
     @JoinTable(

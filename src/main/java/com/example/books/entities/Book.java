@@ -20,16 +20,16 @@ public class Book {
     @Id
     @Column(name = "book_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer BookId;
+    private Integer BookId;
 
     @Column(name = "title")
-    String Title;
+    private String Title;
 
     @Column(name = "author")
-    String Author;
+    private String Author;
 
     @Column(name = "deleted")
-    Boolean deleted;
+    private Boolean deleted;
 
     @ManyToMany(mappedBy = "books")
     List<Person> persons;
