@@ -1,9 +1,8 @@
 package com.example.books.entities;
 
-import com.example.books.entities.enums.Role;
+import com.example.books.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

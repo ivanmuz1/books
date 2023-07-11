@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-import static com.example.books.entities.enums.Role.ROLE_USER;
+import static com.example.books.enums.Role.ROLE_USER;
 
 @Controller
 public class LoginController {

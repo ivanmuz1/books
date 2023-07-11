@@ -1,7 +1,7 @@
 package com.example.books.dto;
 
 import com.example.books.entities.Book;
-import com.example.books.entities.enums.Role;
+import com.example.books.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

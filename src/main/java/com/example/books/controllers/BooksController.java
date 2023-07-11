@@ -29,19 +29,19 @@ public class BooksController {
     }
 
     @PostMapping("/book/update/{BookId}")
-    public Optional<Book> update(@PathVariable int BookId, @RequestBody Book book){
+    public Book update(@PathVariable int BookId, @RequestBody Book book){
         bookService.updateBook(BookId, book);
         return bookService.findById(BookId);
     }
 
     @PostMapping("/{BookId}")
-    public Optional<Book> findById(@PathVariable int BookId){
+    public Book findById(@PathVariable int BookId){
         return bookService.findById(BookId);
     }
 
     @DeleteMapping("/book/delete/{BookId}")
     public void delete(@PathVariable int BookId){
-        bookService.deleteUserByIdToArchive(BookId);
+        bookService.deleteBookByIdToArchive(BookId);
     }
 
 }

@@ -47,18 +47,18 @@ public class BookService {
     }
 
     @Transactional
-    public Optional<Book> findById(int id){ //просмотр свойств существующей книги!
-        return bookRepository.findById(id);
+    public Book findById(int id){ //просмотр свойств существующей книги!
+        return bookRepository.findByIdDeletedFalse(id);
     }
 
     @Transactional
-    public void deleteUserByIdToArchive(int id){
-        Optional<Book> book = bookRepository.findById(id);
-        book.get().setDeleted(true);
-        bookRepository.save(book.get());
+    public void deleteBookByIdToArchive(int id){
+        Book book = bookRepository.findByIdDeletedFalse(id);
+        book.setDeleted(true);
+        bookRepository.save(book);
 
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        ArchiveBooks archiveBooks = new ArchiveBooks(book.get().getBookId(), new Date(), authentication.getName());
+        ArchiveBooks archiveBooks = new ArchiveBooks(book.getBookId(), new Date(), authentication.getName());
         archiveBookRepository.save(archiveBooks);
     }
 }

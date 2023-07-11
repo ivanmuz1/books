@@ -1,4 +1,4 @@
-package com.example.books.entities.enums;
+package com.example.books.enums;
 
 public enum Role {
     ROLE_ADMIN,

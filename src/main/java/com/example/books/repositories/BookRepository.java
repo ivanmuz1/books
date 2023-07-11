@@ -11,4 +11,7 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query(value = "select * from book where deleted = false ", nativeQuery = true)
     List<Book> findAllByDeletedFalse();
+
+    @Query(value = "select * from book where deleted = false and book_id = ?", nativeQuery = true)
+    Book findByIdDeletedFalse(int id);
 }

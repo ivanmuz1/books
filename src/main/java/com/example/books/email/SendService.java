@@ -60,7 +60,7 @@ public class SendService{
 
                     formList.stream().forEach(
                             form -> {
-                                textBuilder.append("Книга: ").append(bookService.findById(form.getBookId()).get().getTitle()).append(", дней просрочки:")
+                                textBuilder.append("Книга: ").append(bookService.findById(form.getBookId()).getTitle()).append(", дней просрочки:")
                                         .append(form.getDaysInArrears()).append(", пенни:").append(form.getPenalties()).append("\n");
                             }
                     );
