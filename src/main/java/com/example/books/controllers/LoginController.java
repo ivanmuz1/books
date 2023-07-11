@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.beans.Encoder;
 
 import static com.example.books.entities.enums.Role.ROLE_USER;
 
@@ -39,7 +38,6 @@ public class LoginController {
     @Autowired
     private final PasswordEncoder encoder;
 
-
     public LoginController(JwtService jwtService, AuthenticationManager authenticationManager, PersonService personService, PasswordEncoder encoder) {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -55,7 +53,9 @@ public class LoginController {
                 request.getAge(),
                 request.getEmail(),
                 encoder.encode( request.getPassword()),
-                ROLE_USER);
+                ROLE_USER,
+                false
+        );
         personService.save(person);
 
 

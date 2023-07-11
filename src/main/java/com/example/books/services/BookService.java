@@ -1,11 +1,16 @@
 package com.example.books.services;
 
+import com.example.books.entities.ArchiveBooks;
 import com.example.books.entities.Book;
+import com.example.books.repositories.ArchiveBookRepository;
 import com.example.books.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,17 +20,21 @@ public class BookService {
     @Autowired
     private final BookRepository bookRepository;
 
-    public BookService(BookRepository bookRepository) {
+    @Autowired
+    private final ArchiveBookRepository archiveBookRepository;
+
+    public BookService(BookRepository bookRepository, ArchiveBookRepository archiveBookRepository) {
         this.bookRepository = bookRepository;
+        this.archiveBookRepository = archiveBookRepository;
     }
     @Transactional()
     public List<Book> findAll(){
-        return bookRepository.findAll();
+        return bookRepository.findAllByDeletedFalse();
     }
     @Transactional
     public void save(Book book){
         bookRepository.save(book);
-    } //создание новой книги
+    }
 
     @Transactional
     public void updateBook(int id, Book newBook){
@@ -35,7 +44,7 @@ public class BookService {
         oldBook.get().setAuthor(newBook.getAuthor());
 
         bookRepository.save(oldBook.get());
-    } //редактирование существующей книги
+    }
 
     @Transactional
     public Optional<Book> findById(int id){ //просмотр свойств существующей книги!
@@ -47,5 +56,9 @@ public class BookService {
         Optional<Book> book = bookRepository.findById(id);
         book.get().setDeleted(true);
         bookRepository.save(book.get());
+
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        ArchiveBooks archiveBooks = new ArchiveBooks(book.get().getBookId(), new Date(), authentication.getName());
+        archiveBookRepository.save(archiveBooks);
     }
 }

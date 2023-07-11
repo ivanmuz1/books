@@ -17,12 +17,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Person {
-    public Person(String name, Integer age, String email, String password, Role role) {
+    public Person(String name, Integer age, String email, String password, Role role, Boolean deleted) {
         Name = name;
         Age = age;
         this.email = email;
         Password = password;
         this.role = role;
+        this.deleted = deleted;
     }
 
     @Id
