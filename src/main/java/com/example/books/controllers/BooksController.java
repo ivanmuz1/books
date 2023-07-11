@@ -3,19 +3,21 @@ package com.example.books.controllers;
 import com.example.books.entities.Book;
 import com.example.books.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@RestController
 @RequestMapping("/library")
+@RestController
 public class BooksController {
 
     @Autowired
-    BookService bookService;
+    private final BookService bookService;
+
+    public BooksController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping("/allbooks")
     public Iterable<Book> books(){

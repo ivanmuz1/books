@@ -5,6 +5,8 @@ import com.example.books.entities.Book;
 import com.example.books.repositories.ArchiveBookRepository;
 import com.example.books.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@EntityScan("com.example.**")
 public class BookService {
 
     @Autowired
@@ -27,6 +30,7 @@ public class BookService {
         this.bookRepository = bookRepository;
         this.archiveBookRepository = archiveBookRepository;
     }
+
     @Transactional()
     public List<Book> findAll(){
         return bookRepository.findAllByDeletedFalse();
@@ -47,7 +51,7 @@ public class BookService {
     }
 
     @Transactional
-    public Book findById(int id){ //просмотр свойств существующей книги!
+    public Book findById(int id){
         return bookRepository.findByIdDeletedFalse(id);
     }
 
