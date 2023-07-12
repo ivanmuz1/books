@@ -5,11 +5,12 @@ import com.example.books.entities.Person;
 import com.example.books.repositories.FormRepository;
 import com.example.books.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -38,11 +39,19 @@ public class FormService {
         return formRepository.EmailForPerson(id);
     }
 
-    public void addNewEntry(Form form) { //изменить
-        Optional<Person> currentPerson = personRepository.findById(1);
-        form.setReaderId(currentPerson.get().getPersonId());
-        form.setDateDelivery(new Date());
+    public Optional<Form> addNewEntry(Integer book_id, Date DateDelivery) {
+        Form form = new Form();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Person> person = personRepository.findByemail(auth.getName());
+
+        form.setReaderId(person.get().getPersonId());
+        form.setDateReceipt(new Date());
+        form.setDateDelivery(DateDelivery);
+        form.setBookId(book_id);
+
         formRepository.save(form);
+        return formRepository.findById(form.getFormId());
     }
 
     public List<Form> DaysInArrears(int ReaderId){

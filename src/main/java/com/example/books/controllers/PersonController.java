@@ -1,12 +1,19 @@
 package com.example.books.controllers;
 
 import com.example.books.dto.PersonDTO;
+import com.example.books.entities.Form;
 import com.example.books.entities.Person;
+import com.example.books.services.FormService;
 import com.example.books.services.PersonService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +22,9 @@ public class PersonController {
 
     @Autowired
     PersonService personService;
+
+    @Autowired
+    FormService formService;
 
     @PostMapping("/user")
     public List<Person> user(@RequestBody Person person){
@@ -42,6 +52,12 @@ public class PersonController {
     @DeleteMapping("/user/delete/{PersonId}")
     public void delete(@PathVariable int PersonId){
         personService.deleteUserByIdToArchive(PersonId);
+    }
+
+    @PostMapping("/add")
+    public Optional<Form> addBookToUser(@RequestParam Integer book_id, LocalDate DateDelivery){
+        Date date = Date.from(DateDelivery.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return formService.addNewEntry(book_id, date);
     }
 
     @GetMapping("/user/{PersonID}/showBooks")
