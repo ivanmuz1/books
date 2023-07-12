@@ -26,6 +26,7 @@ public class BooksController {
 
     @PostMapping("/book/save")
     public List<Book> saveBook(@RequestBody Book book){
+        book.setDeleted(false);
         bookService.save(book);
         return bookService.findAll();
     }
