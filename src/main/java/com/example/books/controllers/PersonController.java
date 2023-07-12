@@ -55,9 +55,8 @@ public class PersonController {
     }
 
     @PostMapping("/add")
-    public Optional<Form> addBookToUser(@RequestParam Integer book_id, LocalDate DateDelivery){
-        Date date = Date.from(DateDelivery.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return formService.addNewEntry(book_id, date);
+    public Optional<Form> addBookToUser(@RequestBody Form form){
+        return formService.addNewEntry(form);
     }
 
     @GetMapping("/user/{PersonID}/showBooks")

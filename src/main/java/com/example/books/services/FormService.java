@@ -39,16 +39,13 @@ public class FormService {
         return formRepository.EmailForPerson(id);
     }
 
-    public Optional<Form> addNewEntry(Integer book_id, Date DateDelivery) {
-        Form form = new Form();
+    public Optional<Form> addNewEntry(Form form) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<Person> person = personRepository.findByemail(auth.getName());
 
         form.setReaderId(person.get().getPersonId());
         form.setDateReceipt(new Date());
-        form.setDateDelivery(DateDelivery);
-        form.setBookId(book_id);
 
         formRepository.save(form);
         return formRepository.findById(form.getFormId());
